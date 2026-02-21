@@ -1,46 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Advanced E-Commerce</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProShop</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo">MyShop</div>
-    <nav>
-        <a href="#">Home</a>
-        <a href="#products">Products</a>
-        <a href="#" onclick="openCart()">Cart (<span id="cart-count">0</span>)</a>
-    </nav>
+    <h2>ProShop</h2>
+    <div>
+        <button onclick="toggleTheme()">🌙</button>
+        <button onclick="openCart()">🛒 (<span id="cart-count">0</span>)</button>
+    </div>
 </header>
 
 <section class="hero">
-    <h1>Modern E-Commerce Website</h1>
-    <p>Premium Quality Products</p>
+    <h1>Premium Collection 2026</h1>
+    <p>Upgrade Your Lifestyle</p>
 </section>
 
-<section class="products" id="products">
-    <h2>Our Products</h2>
+<section class="products" id="product-container"></section>
 
-    <div class="filter">
-        <button onclick="filterProducts('all')">All</button>
-        <button onclick="filterProducts('electronics')">Electronics</button>
-        <button onclick="filterProducts('fashion')">Fashion</button>
-    </div>
-
-    <div class="product-container" id="product-container"></div>
-</section>
-
-<!-- Cart Modal -->
-<div class="cart-modal" id="cart-modal">
-    <div class="cart-content">
-        <h2>Your Cart</h2>
-        <ul id="cart-items"></ul>
-        <h3>Total: $<span id="cart-total">0</span></h3>
-        <button onclick="closeCart()">Close</button>
-    </div>
+<!-- Cart -->
+<div class="cart" id="cart">
+    <h3>Your Cart</h3>
+    <div id="cart-items"></div>
+    <h4>Total: $<span id="cart-total">0</span></h4>
+    <a href="checkout.html"><button>Checkout</button></a>
+    <button onclick="closeCart()">Close</button>
 </div>
 
 <script src="script.js"></script>
