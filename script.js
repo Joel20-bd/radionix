@@ -1,64 +1,74 @@
 const products = [
-    { id: 1, name: "Laptop", price: 800, category: "electronics", image: "https://via.placeholder.com/250" },
-    { id: 2, name: "Headphones", price: 150, category: "electronics", image: "https://via.placeholder.com/250" },
-    { id: 3, name: "T-Shirt", price: 25, category: "fashion", image: "https://via.placeholder.com/250" },
-    { id: 4, name: "Sneakers", price: 60, category: "fashion", image: "https://via.placeholder.com/250" }
+    {id:1,name:"Laptop",price:900,img:"https://via.placeholder.com/250"},
+    {id:2,name:"Smartphone",price:600,img:"https://via.placeholder.com/250"},
+    {id:3,name:"Sneakers",price:120,img:"https://via.placeholder.com/250"},
+    {id:4,name:"Watch",price:200,img:"https://via.placeholder.com/250"}
 ];
 
-let cart = [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-function displayProducts(filter = "all") {
-    const container = document.getElementById("product-container");
-    container.innerHTML = "";
+const container = document.getElementById("product-container");
 
-    const filtered = filter === "all"
-        ? products
-        : products.filter(p => p.category === filter);
-
-    filtered.forEach(product => {
-        container.innerHTML += `
-            <div class="product">
-                <img src="${product.image}">
-                <h3>${product.name}</h3>
-                <p>$${product.price}</p>
-                <button onclick="addToCart(${product.id})">Add to Cart</button>
-            </div>
-        `;
+function displayProducts(){
+    container.innerHTML="";
+    products.forEach(p=>{
+        container.innerHTML+=`
+        <div class="product">
+            <img src="${p.img}">
+            <h3>${p.name}</h3>
+            <p>$${p.price}</p>
+            <button onclick="addToCart(${p.id})">Add to Cart</button>
+        </div>`;
     });
 }
 
-function filterProducts(category) {
-    displayProducts(category);
-}
-
-function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    cart.push(product);
+function addToCart(id){
+    const item = cart.find(p=>p.id===id);
+    if(item){
+        item.qty+=1;
+    }else{
+        const product = products.find(p=>p.id===id);
+        cart.push({...product, qty:1});
+    }
     updateCart();
 }
 
-function updateCart() {
-    document.getElementById("cart-count").innerText = cart.length;
+function updateCart(){
+    localStorage.setItem("cart",JSON.stringify(cart));
+    document.getElementById("cart-count").innerText=cart.reduce((a,b)=>a+b.qty,0);
 
-    const cartItems = document.getElementById("cart-items");
-    cartItems.innerHTML = "";
+    const cartItems=document.getElementById("cart-items");
+    cartItems.innerHTML="";
+    let total=0;
 
-    let total = 0;
-
-    cart.forEach(item => {
-        total += item.price;
-        cartItems.innerHTML += `<li>${item.name} - $${item.price}</li>`;
+    cart.forEach(item=>{
+        total+=item.price*item.qty;
+        cartItems.innerHTML+=`
+        <div>
+            ${item.name} x${item.qty} - $${item.price*item.qty}
+            <button onclick="removeItem(${item.id})">❌</button>
+        </div>`;
     });
 
-    document.getElementById("cart-total").innerText = total;
+    document.getElementById("cart-total").innerText=total;
 }
 
-function openCart() {
-    document.getElementById("cart-modal").style.display = "block";
+function removeItem(id){
+    cart=cart.filter(p=>p.id!==id);
+    updateCart();
 }
 
-function closeCart() {
-    document.getElementById("cart-modal").style.display = "none";
+function openCart(){
+    document.getElementById("cart").classList.add("active");
+}
+
+function closeCart(){
+    document.getElementById("cart").classList.remove("active");
+}
+
+function toggleTheme(){
+    document.body.classList.toggle("dark");
 }
 
 displayProducts();
+updateCart();
